@@ -29,7 +29,8 @@ def plot_band(band, name, wavelength, nodata_val = None, cmap = cm.grey) -> bool
 
     # Plot band
     plt.imshow(tmp_band, cmap=cmap)
-    plt.title(f"{name} (\lambda = {wavelength})")
+    plt.title(f"{name} (wavelength = {wavelength} [nm])")
+    plt.colorbar()
     plt.show()
 
     return True
