@@ -10,13 +10,15 @@ import numpy as np
 
 # Local packages
 
-def plot_band(band, name, wavelength, nodata_val = None, cmap = cm.grey) -> bool:
+def plot_band(band, name, wavelength, nodata_val=None, sample_rate=30, cmap=cm.grey) -> bool:
     """
     Extracts and plots bands from a dataset.
     :param band: Numpy array containing a single spectral band
     :param name: Name for the spectral band being displayed
     :param wavelength: Wavelength of the band being displayed
     :param nodata_val: The no-data value in the band
+    :param sample_rate: The sampling rate in meters
+    :param cmap: The colormap
     :return: True upon successful run of the function
     """
     # Make a copy of band
