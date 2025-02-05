@@ -7,9 +7,10 @@ Calculates the statistics of a single band
 import numpy as np
 from scipy.stats import mstats
 
+
 # Local packages
 
-def calculate_band_statistics(band, nodata_val = None) -> dict:
+def calculate_band_statistics(band, nodata_val=None) -> dict:
     """
     Calculates the mean, standard deviation (std), minimum, maximum, quartiles (Q1, median, Q3), skewness, and kurtosi
     :param band: Single band of data to calculate stats for
@@ -43,6 +44,7 @@ def calculate_band_statistics(band, nodata_val = None) -> dict:
 
     return stats
 
+
 if __name__ == "__main__":
     # Define path for data and load in array
     path = "eda/sentinel2_rochester.npy"
@@ -50,11 +52,12 @@ if __name__ == "__main__":
 
     # Define band names and wavelengths according to sentinel-2 website
     sentinel2_band_names = [
-        "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B8a", "B9", "B11", "B12"
+        "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B8a", "B9", "B11",
+        "B12"
     ]
 
     for idx in range(bands.shape[2]):
-        stats = calculate_band_statistics(bands[:,:,idx], 0)
+        stats = calculate_band_statistics(bands[:, :, idx], 0)
         print(f"Band: {sentinel2_band_names[idx]}")
         print(f"  Mean:               {stats['mean']:0.3f}")
         print(f"  Median:             {stats['median']:0.3f}")

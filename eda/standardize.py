@@ -34,7 +34,8 @@ if __name__ == "__main__":
 
     # Define band names and wavelengths according to sentinel-2 website
     sentinel2_band_names = [
-        "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B8a", "B9", "B11", "B12"
+        "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B8a", "B9", "B11",
+        "B12"
     ]
 
     for idx in range(bands.shape[2]):

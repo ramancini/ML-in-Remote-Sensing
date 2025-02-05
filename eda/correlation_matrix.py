@@ -11,7 +11,8 @@ import numpy as np
 
 def correlation_matrix(bands, nodata_val = None):
     """
-    Calculates the correlation coefficient matrix for a numpy array of multispectral band data
+    Calculates the correlation coefficient matrix for a numpy array of
+    multispectral band data
     :param bands: bands to use for calculation of coefficient matrix
     :param nodata_val: No data value for given band
     """
@@ -33,7 +34,8 @@ if __name__ == "__main__":
 
     # Define band names and wavelengths according to sentinel-2 website
     sentinel2_band_names = [
-        "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B8a", "B9", "B11", "B12"
+        "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B8a", "B9", "B11",
+        "B12"
     ]
 
     output = correlation_matrix(bands, 0)

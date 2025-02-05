@@ -10,7 +10,8 @@ import matplotlib.pyplot as plt
 # Local packages
 from correlation_matrix import correlation_matrix
 
-def correlation_plot(bands, nodata_val = None, band_names = None) -> dict:
+
+def correlation_plot(bands, nodata_val=None, band_names=None) -> dict:
     """
     Plots correlation for input bands
     :param band: bands to plot data for
@@ -23,13 +24,15 @@ def correlation_plot(bands, nodata_val = None, band_names = None) -> dict:
     bands_reshaped = bands.reshape(-1, n_bands)
 
     # Mask out the nodata values
-    masked_data = np.ma.masked_where(bands_reshaped == nodata_val, bands_reshaped)
+    masked_data = np.ma.masked_where(bands_reshaped == nodata_val,
+                                     bands_reshaped)
 
     # Create pairwise vector subplots
     vec_fig, vec_axs = plt.subplots(n_bands, n_bands, sharex=True, sharey=True)
     for r_idx in range(n_bands):
         for c_idx in range(n_bands):
-            vec_axs[r_idx, c_idx].scatter(masked_data[:,c_idx], masked_data[:,r_idx], s=1.0)
+            vec_axs[r_idx, c_idx].scatter(masked_data[:, c_idx],
+                                          masked_data[:, r_idx], s=1.0)
 
     # Give bands names if they aren't provided
     if band_names is None:
@@ -40,7 +43,7 @@ def correlation_plot(bands, nodata_val = None, band_names = None) -> dict:
         col_ax.set_title(f"Band {band_name}")
 
     # Label rows
-    for row_ax, band_name in zip(vec_axs[:,0], band_names):
+    for row_ax, band_name in zip(vec_axs[:, 0], band_names):
         row_ax.set_ylabel(f"Band {band_name}")
 
     vec_fig.tight_layout()
@@ -51,14 +54,16 @@ def correlation_plot(bands, nodata_val = None, band_names = None) -> dict:
     for r_idx in range(n_bands):
         for c_idx in range(n_bands):
             # Create color for plot
-            den_axs[r_idx, c_idx].hist2d(masked_data[:,c_idx], masked_data[:,r_idx], bins=(50,50), cmap='jet')
+            den_axs[r_idx, c_idx].hist2d(masked_data[:, c_idx],
+                                         masked_data[:, r_idx], bins=(50, 50),
+                                         cmap='jet')
 
     # Label cols
     for col_ax, band_name in zip(den_axs[0], band_names):
         col_ax.set_title(f"Band {band_name}")
 
     # Label rows
-    for row_ax, band_name in zip(den_axs[:,0], band_names):
+    for row_ax, band_name in zip(den_axs[:, 0], band_names):
         row_ax.set_ylabel(f"Band {band_name}")
 
     den_fig.tight_layout()
@@ -68,6 +73,7 @@ def correlation_plot(bands, nodata_val = None, band_names = None) -> dict:
 
     return corr_matrix
 
+
 if __name__ == "__main__":
     # Define path for data and load in array
     path = "eda/sentinel2_rochester.npy"
@@ -75,10 +81,11 @@ if __name__ == "__main__":
 
     # Define band names and wavelengths according to sentinel-2 website
     sentinel2_band_names = [
-        "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B8a", "B9", "B11", "B12"
+        "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B8a", "B9", "B11",
+        "B12"
     ]
 
     band_idxs = [1, 2, 3, 7]
     band_names = [sentinel2_band_names[idx] for idx in band_idxs]
 
-    corr_matrix = correlation_plot(bands[:,:,band_idxs], 0, band_names)
+    corr_matrix = correlation_plot(bands[:, :, band_idxs], 0, band_names)
