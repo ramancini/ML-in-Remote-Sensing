@@ -9,7 +9,7 @@ import numpy as np
 
 # Local packages
 
-def standardize(band, nodata_val = None) -> dict:
+def standardize(band, nodata_val = None):
     """
     Calculates the z-score for a multispectral band and normalizes it
     :param band: Single band of data to calculate stats for
@@ -38,8 +38,31 @@ if __name__ == "__main__":
         "B12"
     ]
 
+    fig, axs = plt.subplots(3, 4)
     for idx in range(bands.shape[2]):
-        fig, axs = plt.subplots(2)
-        axs[0].hist(bands[:,:,idx].flatten(), bins=255)
-        axs[0].set_title(f"{sentinel2_band_names[idx]} Histogram")
-        plt.show()
+        ridx = idx // 4
+        cidx = idx % 4
+
+        # Remove nodata values
+        masked_data = np.ma.masked_where(bands[:,:,idx] == 0, bands[:,:,idx])
+
+        axs[ridx, cidx].hist(masked_data.flatten(), bins=255)
+        axs[ridx, cidx].set_title(f"{sentinel2_band_names[idx]} Histogram")
+        axs[ridx, cidx].set_xlim((0, 1))
+
+    plt.show()
+
+    standard_fig, standard_axs = plt.subplots(3, 4)
+    for idx in range(bands.shape[2]):
+        ridx = idx // 4
+        cidx = idx % 4
+
+        # Standardize data
+        standard_data = standardize(bands[:,:,idx], 0)
+
+        standard_axs[ridx, cidx].hist(standard_data.flatten(), bins=255)
+        standard_axs[ridx, cidx].set_title(f"{sentinel2_band_names[idx]} Histogram")
+        standard_axs[ridx, cidx].axvline(-3, color='red', linewidth=0.5)
+        standard_axs[ridx, cidx].axvline(3, color='red', linewidth=0.5)
+
+    plt.show()
