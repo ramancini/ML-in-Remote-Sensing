@@ -1,2 +1,8 @@
 *.npy
 *.csv
+*.tiff
+*.tif
+*.hdr
+
+# Tait reserve data (no extension)
+ml/materials/tait_hsi
