@@ -19,7 +19,7 @@ def principal_component_analysis(array):
                   is the number of features.
     """
     # Standardize the data
-    mean_arr = (array - np.mean(array, axis=0))
+    mean_arr = (array - np.mean(array, axis=0)) / np.std(array, axis=0)
 
     # Perform SVD - scipy seems to sort the pcs already by their eigen values
     u_mat, singular_vals, vt_mat = svd(mean_arr, full_matrices=False)
@@ -32,7 +32,7 @@ def principal_component_analysis(array):
 
 if __name__ == '__main__':
     # Load in data
-    tait_data_path = 'ml/materials/tait_hsi'
+    tait_data_path = '/Users/ramancini/src/python/ML-in-Remote-Sensing/ml/materials/tait_hsi'
     packed_data = spectral.envi.open(tait_data_path + '.hdr', tait_data_path)
     data = packed_data.load()
 
@@ -101,7 +101,8 @@ if __name__ == '__main__':
     var_select_pcs[:, cumulative_var_ratio > 0.99] = 0
 
     # Apply inverse PCA transform
-    inverse_arr = np.dot(tait_mean_arr, tait_pcs) + np.mean(data_reshape, axis=0)
+    reduced_arr = np.dot(tait_mean_arr, tait_pcs)
+    inverse_arr = (np.dot(reduced_arr, var_select_pcs.T) * np.std(data_reshape, axis=0)) + np.mean(data_reshape, axis=0)
 
     # Reshape the data to make pixels easier to grab
     inverse_arr_reshape = inverse_arr.reshape([data.shape[0], data.shape[1], -1])
