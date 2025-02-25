@@ -84,21 +84,30 @@ if __name__ == '__main__':
     # Perform pca
     sent_pcs, sent_evals, sent_mean_arr = principal_component_analysis(bands_reshape)
 
-    # Transform to lower dimensions (3, 4, 5, 6)
+    # Transform to lower dimensions (3, 4, 5, 6) and display
     comps = [3, 4, 5, 6]
-    for comp_idx in comps:
+    sent_fig, sent_axs = plt.subplots(2, 2, sharey=True)
+    for idx, comp_idx in enumerate(comps):
+        # Seed the numpy random number generator so labels end up similar
+        np.random.seed(42)
+
         # Reproject the data
         reproj_data = np.dot(sent_mean_arr, sent_pcs[:,:comp_idx])
 
         # Perform kmeans and reshape data
         # Last HW = found there were roads, vegetation, water, try to replicate
-        sent_classes = kmeans(reproj_data, k=3, max_iter=100)
+        sent_classes = kmeans(reproj_data, k=4, max_iter=100)
         sent_classes_reshape = sent_classes.reshape([bands.shape[0], bands.shape[1]])
 
         # Display results
-        plt.imshow(sent_classes_reshape)
-        plt.title(f"Sentinel data kmeans with first {comp_idx} PCs")
-        plt.show()
+        ridx = idx // 2
+        cidx = idx % 2
+
+        img = sent_axs[ridx, cidx].imshow(sent_classes_reshape)
+        sent_axs[ridx, cidx].set_title(
+            f"Sentinel data kmeans with first {comp_idx} PCs")
+        sent_fig.colorbar(img, ax=sent_axs[ridx, cidx], shrink=0.5)
+    plt.show()
 
     # Load in hyperspectral data
     tait_data_path = '/Users/ramancini/src/python/ML-in-Remote-Sensing/ml/materials/tait_hsi'
@@ -129,7 +138,7 @@ if __name__ == '__main__':
         reproj_data = np.dot(tait_mean_arr, tait_pcs[:,:comp_idx])
 
         # Perform kmeans
-        tait_labels = MiniBatchKMeans(n_clusters=25, max_iter=10000).fit_predict(reproj_data)
+        tait_labels = MiniBatchKMeans(n_clusters=6, max_iter=100).fit_predict(reproj_data)
 
         # Reshape
         tait_labels_reshape = tait_labels.reshape([data_patch.shape[0], data_patch.shape[1]])
@@ -138,7 +147,7 @@ if __name__ == '__main__':
         tait_results.append(tait_labels_reshape)
 
     # Perform kmeans on original data
-    tait_labels = MiniBatchKMeans(n_clusters=25, max_iter=10000).fit_predict(data_patch_reshape)
+    tait_labels = MiniBatchKMeans(n_clusters=6, max_iter=100).fit_predict(data_patch_reshape)
 
     # Reshape
     tait_labels_reshape = tait_labels.reshape(
